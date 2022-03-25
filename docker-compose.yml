@@ -1,0 +1,54 @@
+version: "3"
+services:
+  npm-app:
+    hostname: npm-app
+    container_name: npm-app
+    image: 'jc21/nginx-proxy-manager:2.9.16'
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    environment:
+      DB_MYSQL_HOST: $MYSQL_HOST
+      DB_MYSQL_PORT: $MYSQL_PORT
+      DB_MYSQL_USER: $MYSQL_USER
+      DB_MYSQL_PASSWORD: $MYSQL_PASS
+      DB_MYSQL_NAME: $MYSQL_DB
+      DISABLE_IPV6: 'true'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    depends_on:
+      - npm-db
+    networks:
+      - npm-network
+      - default #para ver al npm-db
+
+  npm-db:
+    hostname: npm-db
+    container_name: npm-db
+    image: 'jc21/mariadb-aria:10.4.15'
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD:  $ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DB
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASS
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+networks:
+  npm-network:
+    external:
+      name: npm-network
