@@ -3,7 +3,7 @@ services:
   npm-app:
     hostname: npm-app
     container_name: npm-app
-    image: 'jc21/nginx-proxy-manager:2.9.16'
+    image: 'jc21/nginx-proxy-manager:2.9.18'
     restart: unless-stopped
     deploy:
       resources:
