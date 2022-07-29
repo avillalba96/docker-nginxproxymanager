@@ -50,5 +50,5 @@ services:
 
 networks:
   npm-network:
-    external:
-      name: npm-network
+    name: npm-network
+    external: true
