@@ -26,7 +26,14 @@ cp cloudflare.conf data/access/ips/cloudflare.conf
 * Y en la pestaña "Advanced" de nuestro sitio quedaria algo asi
 
 ```bash
+# Allow access from specific IPs
+include /data/access/ips/RFC1918.conf;
+include /data/access/ips/cidr-arg.conf;
+include /data/access/ips/cloudflare.conf;
+allow 152.170.176.17/24;
 
+# Deny access to all other IPs
+deny all;
 ```
 
 ## Login
